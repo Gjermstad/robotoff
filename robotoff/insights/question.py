@@ -224,8 +224,8 @@ class ProductWeightQuestionFormatter(QuestionFormatter):
 
         source_image_url = None
         if insight.source_image:
-            source_image_url = settings.OFF_IMAGE_BASE_URL + get_display_image(
-                insight.source_image
+            source_image_url = settings.BaseURLProvider.image_url(
+                get_display_image(insight.source_image)
             )
 
         return AddBinaryQuestion(
@@ -249,8 +249,8 @@ class LabelQuestionFormatter(QuestionFormatter):
 
         source_image_url = None
         if insight.source_image:
-            source_image_url = settings.OFF_IMAGE_BASE_URL + get_display_image(
-                insight.source_image
+            source_image_url = settings.BaseURLProvider.image_url(
+                get_display_image(insight.source_image)
             )
 
         return AddBinaryQuestion(
@@ -271,8 +271,8 @@ class BrandQuestionFormatter(QuestionFormatter):
 
         source_image_url = None
         if insight.source_image:
-            source_image_url = settings.OFF_IMAGE_BASE_URL + get_display_image(
-                insight.source_image
+            source_image_url = settings.BaseURLProvider.image_url(
+                get_display_image(insight.source_image)
             )
 
         return AddBinaryQuestion(
@@ -318,8 +318,8 @@ class NutritionImageQuestionFormatter(QuestionFormatter):
 
         source_image_url = None
         if insight.source_image:
-            source_image_url = settings.OFF_IMAGE_BASE_URL + get_display_image(
-                insight.source_image
+            source_image_url = settings.BaseURLProvider.image_url(
+                get_display_image(insight.source_image)
             )
 
         return AddBinaryQuestion(

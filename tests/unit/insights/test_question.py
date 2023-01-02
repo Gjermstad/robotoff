@@ -16,6 +16,12 @@ from robotoff.types import InsightType
 from robotoff.utils.i18n import TranslationStore
 
 
+def _reset_envvar(monkeypatch):
+    monkeypatch.setenv("ROBOTOFF_INSTANCE", "dev")
+    monkeypatch.delenv("ROBOTOFF_SCHEME", raising=False)
+    monkeypatch.delenv("ROBOTOFF_DOMAIN", raising=False)
+
+
 @pytest.mark.parametrize(
     "source_image,output",
     [
@@ -29,7 +35,8 @@ def test_get_display_image(source_image: str, output: str):
     assert get_display_image(source_image) == output
 
 
-def test_generate_selected_images():
+def test_generate_selected_images(monkeypatch):
+    _reset_envvar(monkeypatch)
     with (TEST_DATA_DIR / "generate_selected_images.json").open("r") as f:
         IMAGE_DATA = json.load(f)
 
@@ -144,7 +151,9 @@ def test_category_question_formatter(
     expected_question_str: str,
     translation_store: TranslationStore,
     mocker,
+    monkeypatch,
 ):
+    _reset_envvar(monkeypatch)
     mocker.patch(
         "robotoff.insights.question.get_product",
         return_value={"images": {"front_fr": {"rev": "10", "sizes": {"400": {}}}}},
@@ -201,7 +210,9 @@ def test_label_question_formatter(
     expected_question_str: str,
     ref_image_url: Optional[str],
     translation_store: TranslationStore,
+    monkeypatch,
 ):
+    _reset_envvar(monkeypatch)
     insight = generate_insight(
         InsightType.label.name, None, value_tag, add_source_image=True
     )
