@@ -1,0 +1,33 @@
+name: "Daily tasks (cronjobs)"
+
+on:
+  schedule:
+  - cron: "5 0 * * *" # once a day at 00:05
+  push:
+    branches: ["cron-daily*"]
+
+jobs:
+  # Perform daily PostgreSQL DB backup
+  postgre-db-backup:
+    runs-on: ubuntu-latest
+    environment: robotoff-org
+    concurrency: robotoff-org
+    steps:
+    - name: Set env variables
+      run: |
+          echo "SSH_PROXY_HOST=ovh1.openfoodfacts.org" >> $GITHUB_ENV
+          echo "SSH_USERNAME=off" >> $GITHUB_ENV
+          echo "SSH_HOST=10.1.0.201" >> $GITHUB_ENV
+    - name: Backup production database
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ env.SSH_HOST }}
+        username: ${{ env.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        proxy_host: ${{ env.SSH_PROXY_HOST }}
+        proxy_username: ${{ env.SSH_USERNAME }}
+        proxy_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script_stop: false
+        script: |
+          cd robotoff-org
+          make backup_postgres
